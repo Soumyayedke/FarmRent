@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>FarmRent: Fields in Motion</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,300&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="assets/photos/hero-aerial.png" fetchpriority="high">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="skip" href="#story">Skip to content</a>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<defs>
+<filter id="grain"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" seed="7"/><feColorMatrix values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .16 0"/></filter>
+<symbol id="pine" viewBox="0 0 100 160"><rect x="46" y="120" width="8" height="40" fill="#3a2a1c"/><path d="M50 0 80 52H63l28 48H62l30 28H8l30-28H9l28-48H20Z" fill="currentColor"/></symbol>
+<symbol id="tractor" viewBox="-150 670 330 180"><path d="M20 828v-60h118l16 22v38Z" fill="#e0a526"/><path d="M20 768h118l16 22H20Z" fill="#f0c04e"/><rect x="104" y="722" width="10" height="48" fill="#12301f"/><path d="M-118 828v-30l-6-110h120l10 110v30Z" fill="#12301f"/><path d="M-108 696h98l8 92h-112Z" fill="#cfe0c6"/><rect x="-132" y="676" width="150" height="20" rx="3" fill="#e0a526"/><path d="M-142 828c-10-80 40-120 100-110l10 110Z" fill="#b8860f"/><circle cx="-60" cy="776" r="62" fill="#0e1f16"/><circle cx="-60" cy="776" r="26" fill="#e0a526"/><circle cx="92" cy="802" r="36" fill="#0e1f16"/><circle cx="92" cy="802" r="15" fill="#e0a526"/></symbol>
+</defs></svg>
+
+<header class="nav" id="nav">
+<a class="brand" href="#top" aria-label="FarmRent home"><svg viewBox="0 0 32 32" width="26" height="26" aria-hidden="true"><circle cx="16" cy="12" r="6" fill="#e0a526"/><path d="M0 28c6-10 14-12 20-8s9 3 12-2v12H0Z" fill="currentColor"/></svg><span>FarmRent</span></a>
+<button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="menu">Menu</button>
+</header>
+
+<div class="menu" id="menu" role="dialog" aria-modal="true" aria-label="Site menu">
+<nav aria-label="Menu">
+<a href="#top">Home</a><a href="#machines">Equipment</a><a href="#why">The problem</a><a href="#journeys">Farmers and owners</a><a href="#process">How it works</a><a href="#join" data-app="list">List your equipment</a><a href="#login" data-app="login">Log in</a>
+</nav>
+<small>Nagpur · Vidarbha · farm equipment rental between neighbours</small>
+</div>
+
+<main id="top" tabindex="-1">
+
+<!-- HERO: full-bleed aerial photograph -->
+<section class="hero" id="hero" data-nav="dark" aria-labelledby="heroTitle">
+ <div class="hero-media" id="heroMedia">
+  <div class="frame" data-photo="assets/photos/hero-aerial.png" data-priority data-alt="Aerial view of green crop rows, a farmhouse and distant hills at sunrise" style="--fx:70%;--fy:25%;--pos-d:50% 38%;--pos-m:75% 50%"><div class="inner"><div class="ph" aria-hidden="true"></div></div><span class="tag" aria-hidden="true">hero-aerial.png</span></div>
+ </div>
+ <div class="hero-shade" aria-hidden="true"></div>
+ <div class="hero-dim" id="heroDim" aria-hidden="true"></div>
+ <div class="hero-text" id="heroText">
+  <h1 id="heroTitle"><span class="ln"><span>Access machinery.</span></span><span class="ln"><span>Grow opportunity.</span></span></h1>
+  <p class="lede">A platform connecting farmers who need agricultural machinery with equipment owners looking to earn rental income.</p>
+  <div class="hero-cta"><a class="pill gold" href="#machines" data-app="browse">Explore Equipment</a><a class="pill ghost" href="#journeys" data-app="list">List Your Equipment</a></div>
+ </div>
+ <div class="cue" id="cue" aria-hidden="true"><i></i>Scroll</div>
+ <div class="hero-fade" id="heroFade" aria-hidden="true"></div>
+</section>
+
+<!-- STORY / MACHINERY -->
+<section class="mach" id="machines" aria-labelledby="mTitle">
+<div class="mach-head" id="story" data-nav="light"><h2 id="mTitle">Three machines that carry a season</h2><p>FarmRent lists six kinds of equipment. These three show how the season runs: till and haul, cut and thresh, protect the crop.</p></div>
+<div class="mach-stage" id="machStage" data-nav="dark">
+ <div class="mp" role="group" aria-label="Tractor">
+  <div class="shot frame" data-photo="assets/photos/tractor-closeup.png" data-alt="Green tractor pulling a disc harrow through dark soil at sunset" style="--fx:35%;--fy:62%;--pos-d:55% 50%"><div class="inner"><div class="ph" aria-hidden="true"></div></div><span class="tag" aria-hidden="true">tractor-closeup.png</span></div>
+  <div class="mt"><h3><span class="rise"><span>Tractor</span></span></h3><p>Plough, till and haul. Book it for the week the soil is ready, not the whole year.</p><span class="note">Sample imagery, not a live listing</span></div>
+ </div>
+ <div class="mp" role="group" aria-label="Harvester">
+  <div class="shot frame" data-photo="assets/photos/harvester.png" data-alt="Yellow combine harvester cutting a golden wheat field at sunset" style="--fx:60%;--fy:48%;--pos-d:100% 50%"><div class="inner"><div class="ph" aria-hidden="true"></div></div><span class="tag" aria-hidden="true">harvester.png</span></div>
+  <div class="mt"><h3><span class="rise"><span>Harvester</span></span></h3><p>Cut, thresh and clean in one pass. Book it for the week the crop turns, not the month after.</p><span class="note">Sample imagery, not a live listing</span></div>
+ </div>
+ <div class="mp" role="group" aria-label="Sprayer">
+  <div class="shot frame" data-photo="assets/photos/sprayer.png" data-alt="Red tractor sprayer with its boom extended, misting a green crop at sunset" style="--fx:50%;--fy:58%;--pos-d:60% 50%"><div class="inner"><div class="ph" aria-hidden="true"></div></div><span class="tag" aria-hidden="true">sprayer.png</span></div>
+  <div class="mt"><h3><span class="rise"><span>Sprayer</span></span></h3><p>Even cover, less waste. Worth renting when you need it twice a season, not buying.</p><span class="note">Sample imagery, not a live listing</span></div>
+ </div>
+ <p class="count" aria-hidden="true"><b id="cNum">01</b><span>/ 03</span><span id="cName">Tractor</span></p>
+</div>
+<div class="strip-wrap" data-nav="light" aria-hidden="true"><div class="strip" id="strip"><i>Tractor</i><span>/</span><i>Harvester</i><span>/</span><i>Rotavator</i><span>/</span><i>Sprayer</i><span>/</span><i>Seed drill</i><span>/</span><i>Thresher</i><span>/</span><i>Tractor</i><span>/</span><i>Harvester</i></div></div>
+</section>
+
+<!-- PROBLEM (dark) -->
+<section class="problem" id="why" data-nav="dark" aria-label="The problem FarmRent solves">
+<svg class="hillup" id="hillup" viewBox="0 0 1600 200" preserveAspectRatio="none" aria-hidden="true"><path d="M0 200V110C220 40 420 90 660 70S1100 0 1320 40s220 30 280 10V200Z" fill="#0a1812"/></svg>
+<svg class="stars" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><g fill="#f4eedd"><circle cx="200" cy="140" r="1.6"/><circle cx="520" cy="300" r="1.2"/><circle cx="900" cy="120" r="1.8"/><circle cx="1260" cy="260" r="1.3"/><circle cx="1480" cy="90" r="1.6"/><circle cx="700" cy="520" r="1.2"/><circle cx="1100" cy="640" r="1.5"/><circle cx="330" cy="700" r="1.3"/></g></svg>
+<div class="p-stick" id="pStick">
+ <p class="p-line">A tractor sits idle for most of the year.<small>Owners paid for the machine and it earns nothing between seasons.</small></p>
+ <p class="p-line">A field waits on one for a single week.<small>Smallholder farmers can’t justify buying equipment they need for days, so the work is late or done by hand.</small></p>
+ <p class="p-line">FarmRent puts the two on <em>the same road.</em><small>Local farmers find nearby owners, request dates and agree a cost before anything moves.</small></p>
+</div>
+</section>
+
+<!-- JOURNEYS -->
+<section class="jr-wrap" id="journeys" data-nav="light" aria-labelledby="jTitle">
+<h2 id="jTitle">Two people, one booking</h2>
+<div class="jr">
+ <div class="jr-art" id="jrA1"><div class="frame over" data-photo="assets/photos/farmer.png" data-alt="A smiling farmer in a turban checking equipment on his phone, a tractor behind him in the field" style="--pos-d:32% 50%"><div class="inner"></div></div><svg viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="800" height="600" fill="#cfdcb4"/><path d="M0 330C160 250 330 300 520 270S720 230 800 260V600H0Z" fill="#9fb08a"/><path d="M0 430C240 380 480 440 800 380V600H0Z" fill="#5f8758"/><path d="M80 520l200-20 80 30-220 30Zm300-8l220-18 70 30-240 24Z" fill="#d8ae45"/><g style="color:#2f5c3a"><use href="#pine" x="560" y="250" width="60" height="100"/><use href="#pine" x="620" y="270" width="46" height="76"/></g><circle cx="620" cy="130" r="54" fill="#e8ae2c"/></svg></div>
+ <div class="jr-body"><h3>For farmers</h3><ol>
+  <li><b>Browse nearby equipment</b>Filter by machine type and see the daily price and specs.</li>
+  <li><b>Request your dates</b>The day count and total update as you pick dates. You see the cost before you send.</li>
+  <li><b>Wait for approval, then work</b>The owner accepts or declines. Track every request from your dashboard.</li>
+  <li><b>Pay and keep a receipt</b>Checkout is a clearly labelled demo for now: no real money moves.</li></ol></div>
+</div>
+<div class="jr rev">
+ <div class="jr-art" id="jrA2"><div class="frame over" data-photo="assets/photos/equipment-owner.png" data-alt="A smiling equipment owner with folded arms in front of a tractor and implements under a shed" style="--pos-d:32% 50%"><div class="inner"></div></div><svg viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="800" height="600" fill="#f6e3ae"/><path d="M0 360C200 290 380 340 560 300S740 270 800 290V600H0Z" fill="#c49a3a"/><path d="M0 460C260 410 520 470 800 420V600H0Z" fill="#3d6a47"/><g transform="translate(180 330) scale(.9)"><use href="#tractor" x="-150" y="670" width="330" height="180" transform="translate(0 -700)"/></g><circle cx="180" cy="140" r="50" fill="#fff3c4"/></svg></div>
+ <div class="jr-body"><h3>For equipment owners</h3><ol>
+  <li><b>List your machine</b>Add the type, daily price and specs once.</li>
+  <li><b>Review each request</b>See the farmer’s dates and accept or decline.</li>
+  <li><b>Mark the job complete</b>Approval and payment are tracked as separate things, so nothing is assumed.</li>
+  <li><b>See what you earn</b>Your dashboard shows earnings from completed rentals.</li></ol>
+  <p class="note">Availability can be switched on or off any time.</p></div>
+</div>
+</section>
+
+<!-- PROCESS -->
+<section class="proc" id="process" data-nav="dark" aria-labelledby="pTitle">
+<div class="proc-in">
+ <h2 id="pTitle">Discover. Request. Get to work.</h2>
+ <svg class="road" id="road" viewBox="0 0 1600 360" aria-hidden="true">
+  <path id="roadBg" d="M40 280C300 280 360 90 620 110S860 300 1100 250 1400 80 1560 90" fill="none" stroke="#2f5c3a" stroke-width="14" stroke-linecap="round" stroke-dasharray="2 26"/>
+  <path id="roadFg" d="M40 280C300 280 360 90 620 110S860 300 1100 250 1400 80 1560 90" fill="none" stroke="#e0a526" stroke-width="8" stroke-linecap="round"/>
+  <g id="nodes" fill="#12301f" stroke="#e0a526" stroke-width="6"><circle class="nd" r="20"/><circle class="nd" r="20"/><circle class="nd" r="20"/></g>
+  <g id="rider"><circle r="24" fill="#e0a526"/><path d="M-10 4h20M-6 -8h12" stroke="#12301f" stroke-width="5" stroke-linecap="round"/></g>
+ </svg>
+ <div class="caps" id="caps">
+  <div class="cap"><h3>Discover</h3><p>Find equipment near your village, with price and specs up front.</p></div>
+  <div class="cap"><h3>Request</h3><p>Choose your dates. The owner approves and you see the full cost.</p></div>
+  <div class="cap"><h3>Get to work</h3><p>Collect the machine, finish the job and the owner marks it complete.</p></div>
+ </div>
+</div>
+</section>
+
+<!-- CTA: closing photograph, mirrors the hero -->
+<section class="cta" id="join" data-nav="dark" aria-labelledby="cTitle">
+ <div class="frame" id="closeFrame" data-photo="assets/photos/closing-landscape.png" data-alt="Farmland at sunset with a large tree, a village house and crop rows under an orange sky" style="--fx:75%;--fy:40%;--pos-d:50% 55%;--pos-m:85% 50%"><div class="inner"><div class="ph" aria-hidden="true"></div></div><span class="tag" aria-hidden="true">closing-landscape.png</span></div>
+ <div class="cta-shade" aria-hidden="true"></div>
+ <div class="cta-copy"><h2 id="cTitle">Make every machine count.</h2><p>Own equipment? List it and earn from every week it would have stood still. Need some? Find it nearby.</p>
+  <div class="btns"><a class="pill gold" href="#journeys" data-app="list">List your equipment</a><a class="pill ghost" href="#machines" data-app="browse">Browse equipment</a></div></div>
+ <div class="foot"><span>FarmRent is a college project. Equipment shown is illustrative.</span><span>Payments are a demo: no real money.</span></div>
+</section>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="js/machinery-plan.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FarmRent — Farm Equipment Rental Portal</title>
+
+<!-- Google Fonts: Poppins for headings, Inter for body text -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- Font Awesome icons (used for small UI icons like location pin, star etc.) -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<link rel="stylesheet" href="style.css" />
+</head>
+<body class="cinematic-home-active">
+
+<!-- ================= NAVBAR ================= -->
+<header class="navbar">
+  <div class="navbar-inner">
+    <a href="#" class="logo" onclick="showPage('home'); return false;">
+      <span class="logo-emoji">🌾</span> FarmRent
+    </a>
+
+    <nav class="nav-links" id="navLinks">
+      <a href="#" onclick="showPage('home'); return false;">Home</a>
+      <a href="#" onclick="showPage('listing'); return false;">Equipment</a>
+      <a href="#" onclick="scrollToHowItWorks(); return false;">How It Works</a>
+      <a href="#" onclick="showAbout(); return false;">About</a>
+    </nav>
+
+    <div class="navbar-actions">
+      <button class="btn btn-text" id="navLoginBtn" onclick="openLoginModal()">Login</button>
+      <button class="btn btn-primary" onclick="handleListEquipment()">List Your Equipment</button>
+    </div>
+
+    <button class="hamburger" id="hamburgerBtn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <!-- Mobile dropdown menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#" onclick="showPage('home'); toggleMobileMenu(); return false;">Home</a>
+    <a href="#" onclick="showPage('listing'); toggleMobileMenu(); return false;">Equipment</a>
+    <a href="#" onclick="scrollToHowItWorks(); toggleMobileMenu(); return false;">How It Works</a>
+    <a href="#" onclick="showAbout(); toggleMobileMenu(); return false;">About</a>
+    <a href="#" id="mobileLoginBtn" onclick="openLoginModal(); toggleMobileMenu(); return false;">Login</a>
+    <a href="#" class="mobile-cta" onclick="handleListEquipment(); toggleMobileMenu(); return false;">List Your Equipment</a>
+  </div>
+</header>
+
+<!-- ================= TOAST (small popup message) ================= -->
+<div class="toast" id="toast"></div>
+
+<main>
+
+<!-- =========================================================
+     PAGE 1: FARMER HOME PAGE
+========================================================= -->
+<section class="page active" id="page-home" aria-label="FarmRent home">
+  <iframe
+    id="cinematicHomeFrame"
+    class="cinematic-home-frame"
+    src="cinematic/index.html"
+    title="FarmRent — Access machinery. Grow opportunity."
+    loading="eager"
+    allow="fullscreen"
+  ></iframe>
+</section>
+
+<!-- =========================================================
+     PAGE 2: EQUIPMENT LISTING
+========================================================= -->
+<section class="page" id="page-listing">
+  <div class="listing-header">
+    <h1>Find Agricultural Equipment</h1>
+    <p>Browse equipment available for rent near you.</p>
+    <div class="search-field top-search">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input type="text" id="listingSearchInput" placeholder="Search equipment..." oninput="applyFilters()" />
+    </div>
+  </div>
+
+  <div class="listing-layout">
+
+    <!-- FILTERS SIDEBAR -->
+    <aside class="filters-sidebar">
+      <h3>Filters</h3>
+
+      <div class="filter-group">
+        <h4>Category</h4>
+        <label><input type="checkbox" value="Tractor" class="cat-filter" onchange="applyFilters()" /> Tractor</label>
+        <label><input type="checkbox" value="Harvester" class="cat-filter" onchange="applyFilters()" /> Harvester</label>
+        <label><input type="checkbox" value="Rotavator" class="cat-filter" onchange="applyFilters()" /> Rotavator</label>
+        <label><input type="checkbox" value="Sprayer" class="cat-filter" onchange="applyFilters()" /> Sprayer</label>
+        <label><input type="checkbox" value="Seed Drill" class="cat-filter" onchange="applyFilters()" /> Seed Drill</label>
+        <label><input type="checkbox" value="Water Pump" class="cat-filter" onchange="applyFilters()" /> Water Pump</label>
+      </div>
+
+      <div class="filter-group">
+        <h4>Price (₹ / day)</h4>
+        <input type="range" id="priceRange" min="500" max="5000" step="100" value="5000" oninput="updatePriceLabel(); applyFilters()" />
+        <div class="price-range-label">₹500 — ₹<span id="priceRangeValue">5000</span> / day</div>
+      </div>
+
+      <div class="filter-group">
+        <h4>Availability</h4>
+        <label><input type="checkbox" id="availabilityFilter" onchange="applyFilters()" /> Available now</label>
+      </div>
+
+      <div class="filter-group">
+        <h4>Location</h4>
+        <div class="search-field">
+          <i class="fa-solid fa-location-dot"></i>
+          <input type="text" placeholder="Enter location" />
+        </div>
+      </div>
+
+      <button class="btn btn-outline full-width" onclick="resetFilters()">Reset Filters</button>
+    </aside>
+
+    <!-- EQUIPMENT RESULTS -->
+    <div class="listing-results">
+      <div class="listing-toolbar">
+        <span id="resultsCount">Showing all equipment</span>
+        <select id="sortSelect" onchange="applyFilters()">
+          <option value="recommended">Sort by: Recommended</option>
+          <option value="price-low">Price: Low to High</option>
+          <option value="price-high">Price: High to Low</option>
+          <option value="rating">Highest Rated</option>
+          <option value="distance">Nearest First</option>
+        </select>
+      </div>
+
+      <div class="equipment-grid" id="listingEquipmentGrid">
+        <!-- Cards injected by script.js -->
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     PAGE 3: EQUIPMENT DETAILS
+========================================================= -->
+<section class="page" id="page-details">
+  <div class="details-layout" id="detailsContent">
+    <!-- Filled dynamically by script.js -->
+  </div>
+</section>
+
+<!-- =========================================================
+     PAGE 4: BOOKING
+========================================================= -->
+<section class="page" id="page-booking">
+
+  <!-- Booking form view -->
+  <div class="booking-card" id="bookingFormView">
+    <h1>Confirm Your Booking</h1>
+
+    <div class="booking-equipment-summary" id="bookingEquipmentSummary">
+      <!-- Filled dynamically -->
+    </div>
+
+    <div class="booking-dates">
+      <div class="date-field">
+        <label for="startDate">Start Date</label>
+        <input type="date" id="startDate" onchange="updateBookingSummary()" />
+      </div>
+      <div class="date-field">
+        <label for="endDate">End Date</label>
+        <input type="date" id="endDate" onchange="updateBookingSummary()" />
+      </div>
+    </div>
+
+    <p class="duration-line">Duration: <strong id="durationText">—</strong></p>
+
+    <div class="price-breakdown" id="priceBreakdown">
+      <!-- Filled dynamically -->
+    </div>
+
+    <button class="btn btn-primary full-width" onclick="confirmBooking()">Confirm Booking</button>
+  </div>
+
+  <!-- Booking success view -->
+  <div class="booking-success" id="bookingSuccessView" style="display:none;">
+    <div class="success-icon"><i class="fa-solid fa-circle-check"></i></div>
+    <h1>Booking Request Submitted</h1>
+    <p>Your equipment rental request has been submitted to the owner for approval.</p>
+    <p class="booking-id-label">Booking Reference</p>
+    <p class="booking-id" id="bookingIdText">FR-2026-00124</p>
+
+    <!-- Demo Payment Action Banner -->
+    <div class="demo-payment-prompt-box">
+      <div class="data-tag estimate"><i class="fa-solid fa-flask"></i> DEMO PAYMENT — NO REAL MONEY</div>
+      <p>Simulate payment now to test checkout, or review your booking first in the Farmer Dashboard.</p>
+      <div class="booking-success-actions">
+        <button class="btn btn-primary" id="btnPayNowDemo" onclick="openDemoPaymentForLatestBooking()">
+          <i class="fa-solid fa-credit-card"></i> Pay Now (Demo Simulation)
+        </button>
+        <button class="btn btn-outline" onclick="showPage('dashboard')">
+          <i class="fa-solid fa-table-columns"></i> View in Farmer Dashboard
+        </button>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- =========================================================
+     PAGE 5: FARMER DASHBOARD (Dynamic from Supabase)
+========================================================= -->
+<section class="page" id="page-dashboard">
+  <div class="dashboard-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="dashboard-sidebar">
+      <div class="logo dashboard-logo"><span class="logo-emoji">🌾</span> FarmRent</div>
+      <nav class="dashboard-nav" id="farmerNav">
+        <a href="#" class="active" data-farmer-section="overview" onclick="showFarmerSection('overview'); return false;"><i class="fa-solid fa-gauge"></i> Dashboard</a>
+        <a href="#" onclick="showPage('listing'); return false;"><i class="fa-solid fa-magnifying-glass"></i> Browse Equipment</a>
+        <a href="#" data-farmer-section="bookings" onclick="showFarmerSection('bookings'); return false;"><i class="fa-solid fa-calendar-check"></i> My Bookings</a>
+        <a href="#" data-farmer-section="payments" onclick="showFarmerSection('payments'); return false;"><i class="fa-solid fa-receipt"></i> Payments & Receipts</a>
+        <a href="#" onclick="showProfilePage(); return false;"><i class="fa-solid fa-user"></i> Profile</a>
+        <a href="#" onclick="handleLogout(); return false;"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+      </nav>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <div class="dashboard-main">
+      <h1 id="dashboardWelcome">Welcome back!</h1>
+      <p id="farmerDashboardMessage" class="inline-message" role="status"></p>
+
+      <div class="farmer-sub-section" id="farmerSub-overview">
+        <div class="summary-cards">
+          <div class="summary-card">
+            <span class="summary-number" id="farmerActiveRentals">—</span>
+            <span class="summary-label">Pending Approval</span>
+          </div>
+          <div class="summary-card">
+            <span class="summary-number" id="farmerUpcomingRentals">—</span>
+            <span class="summary-label">Approved Rentals</span>
+          </div>
+          <div class="summary-card">
+            <span class="summary-number" id="farmerCompletedRentals">—</span>
+            <span class="summary-label">Completed Rentals</span>
+          </div>
+          <div class="summary-card">
+            <span class="summary-number" id="farmerTotalSpent">—</span>
+            <span class="summary-label">Paid Volume <span class="data-tag actual">Demo</span></span>
+            <span class="summary-note">Total completed or settled via demo payment flow.</span>
+          </div>
+        </div>
+
+        <h2 class="dashboard-subheading">Latest Booking / Upcoming Rental</h2>
+        <div id="farmerUpcomingContainer">
+          <p class="muted-text">Loading upcoming booking...</p>
+        </div>
+      </div>
+
+      <div class="farmer-sub-section" id="farmerSub-bookings">
+        <div class="section-header-inline">
+          <h2 class="dashboard-subheading" id="farmerRentalsHeading">My Equipment Bookings</h2>
+          <div class="filter-pills" id="farmerFilterPills">
+            <button class="pill active" onclick="filterFarmerRentals('all', this)">All</button>
+            <button class="pill" onclick="filterFarmerRentals('pending', this)">Pending</button>
+            <button class="pill" onclick="filterFarmerRentals('approved', this)">Approved</button>
+            <button class="pill" onclick="filterFarmerRentals('completed', this)">Completed</button>
+            <button class="pill" onclick="filterFarmerRentals('unpaid', this)">Unpaid</button>
+            <button class="pill" onclick="filterFarmerRentals('paid', this)">Paid (Demo)</button>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table class="rentals-table">
+            <thead>
+              <tr>
+                <th>Equipment</th>
+                <th>Rental Dates</th>
+                <th>Duration</th>
+                <th>Amount</th>
+                <th>Approval Status</th>
+                <th>Payment Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="farmerRentalsTable">
+              <tr><td colspan="7">Loading your rental bookings...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- PROFILE PAGE -->
+<section class="page" id="page-profile">
+
+    <div class="dashboard-layout">
+
+        <!-- SIDEBAR -->
+        <aside class="dashboard-sidebar">
+            <div class="logo dashboard-logo">
+                <span class="logo-emoji">🌾</span> FarmRent
+            </div>
+
+            <nav class="dashboard-nav" id="profileNavFarmer">
+
+                <a href="#" onclick="showPage('dashboard'); return false;">
+                    <i class="fa-solid fa-gauge"></i> Dashboard
+                </a>
+
+                <a href="#" onclick="showPage('listing'); return false;">
+                    <i class="fa-solid fa-magnifying-glass"></i> Browse Equipment
+                </a>
+
+                <a href="#" onclick="return false;">
+                    <i class="fa-solid fa-calendar-check"></i> My Bookings
+                </a>
+
+                <a href="#" onclick="return false;">
+                    <i class="fa-solid fa-clock-rotate-left"></i> Rental History
+                </a>
+
+                <a href="#" onclick="return false;">
+                    <i class="fa-solid fa-indian-rupee-sign"></i> Payments
+                </a>
+
+                <a href="#" class="active" onclick="showProfilePage(); return false;">
+    <i class="fa-solid fa-user"></i> Profile
+</a>
+
+                <a href="#" onclick="handleLogout(); return false;">
+                    <i class="fa-solid fa-right-from-bracket"></i> Logout
+                </a>
+
+            </nav>
+        
+
+            <nav class="dashboard-nav" id="profileNavOwner" hidden>
+                <a href="#" onclick="showOwnerDashboard(); return false;"><i class="fa-solid fa-gauge"></i> Dashboard</a>
+                <a href="#" onclick="showOwnerDashboard('ownerEquipmentSection'); return false;"><i class="fa-solid fa-tractor"></i> My Equipment</a>
+                <a href="#" onclick="showPage('bookingRequests'); return false;"><i class="fa-solid fa-calendar-check"></i> Booking Requests</a>
+                <a href="#" onclick="showOwnerDashboard('ownerEarningsCard'); return false;"><i class="fa-solid fa-indian-rupee-sign"></i> Earnings</a>
+                <a href="#" class="active" onclick="showProfilePage(); return false;"><i class="fa-solid fa-user"></i> Profile</a>
+                <a href="#" onclick="handleLogout(); return false;"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+            </nav>
+        </aside>
+
+        <!-- PROFILE CONTENT -->
+        <div class="dashboard-main">
+
+            <h1>My Profile</h1>
+
+            <div class="profile-card">
+
+                <div class="profile-header">
+                    <div class="profile-avatar" id="profileAvatar">
+                        S
+                    </div>
+
+                    <div>
+                        <h2 id="profileName">Loading...</h2>
+                        <p id="profileRole">Farmer</p>
+                    </div>
+                </div>
+
+                <div class="profile-details">
+
+                    <div class="profile-detail">
+                        <strong>Full Name</strong>
+                        <span id="profileFullName">Loading...</span>
+                    </div>
+
+                    <div class="profile-detail">
+                        <strong>Email</strong>
+                        <span id="profileEmail">Loading...</span>
+                    </div>
+
+                    <div class="profile-detail">
+                        <strong>Phone</strong>
+                        <span id="profilePhone">Loading...</span>
+                    </div>
+
+                    <div class="profile-detail">
+                        <strong>Address</strong>
+                        <span id="profileAddress">Loading...</span>
+                    </div>
+
+                    <div class="profile-detail">
+                        <strong>Role</strong>
+                        <span id="profileRoleDetail">Loading...</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- =========================================================
+     PAGE 6: OWNER DASHBOARD
+========================================================= -->
+<section class="page" id="page-ownerDashboard">
+  <div class="dashboard-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="dashboard-sidebar">
+      <div class="logo dashboard-logo"><span class="logo-emoji">🌾</span> FarmRent</div>
+      <nav class="dashboard-nav">
+        <a href="#" class="active" onclick="showOwnerDashboard(); return false;"><i class="fa-solid fa-gauge"></i> Dashboard</a>
+        <a href="#" onclick="showOwnerDashboard('ownerEquipmentSection'); return false;"><i class="fa-solid fa-tractor"></i> My Equipment</a>
+        <a href="#" onclick="showPage('bookingRequests'); return false;"><i class="fa-solid fa-calendar-check"></i> Booking Requests</a>
+        <a href="#" onclick="showOwnerDashboard('ownerEarningsCard'); return false;"><i class="fa-solid fa-indian-rupee-sign"></i> Earnings</a>
+        <a href="#" onclick="showProfilePage(); return false;"><i class="fa-solid fa-user"></i> Profile</a>
+        <a href="#" onclick="handleLogout(); return false;"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+      </nav>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <div class="dashboard-main">
+      <h1 id="ownerDashboardWelcome">Welcome back!</h1>
+
+      <!-- Live statistics: all four values are filled in by script.js from Supabase -->
+      <div class="summary-cards">
+        <div class="summary-card">
+          <span class="summary-number" id="statEquipmentCount">…</span>
+          <span class="summary-label">Equipment Listed</span>
+        </div>
+        <div class="summary-card">
+          <span class="summary-number" id="statPendingCount">…</span>
+          <span class="summary-label">Pending Requests</span>
+        </div>
+        <div class="summary-card">
+          <span class="summary-number" id="statCompletedCount">…</span>
+          <span class="summary-label">Completed Rentals</span>
+        </div>
+        <div class="summary-card" id="ownerEarningsCard">
+          <span class="summary-number" id="statEarnings">…</span>
+          <span class="summary-label">Total Earnings</span>
+          <span class="summary-note" id="statEarningsNote"></span>
+        </div>
+      </div>
+      <p id="ownerStatsMessage" class="inline-message" role="status"></p>
+
+      <h2 class="dashboard-subheading">Latest Booking Request</h2>
+      <div id="ownerLatestRequest">
+        <p class="muted-text">Loading...</p>
+      </div>
+
+      <div class="equipment-owner-heading" id="ownerEquipmentSection">
+        <h2 class="dashboard-subheading">My Equipment</h2>
+        <button class="btn btn-primary" onclick="showAddEquipmentForm()">
+          + Add Equipment
+        </button>
+      </div>
+
+<div id="addEquipmentPanel" class="equipment-form-card" style="display:none;">
+  <h2>Add New Equipment</h2>
+  <p>Enter the details of the equipment you want to rent out.</p>
+
+  <form id="addEquipmentForm" onsubmit="handleAddEquipment(event)">
+    <div class="equipment-form-grid">
+      <div class="equipment-form-field">
+        <label for="equipmentName">Equipment Name *</label>
+        <input id="equipmentName" type="text" required
+               placeholder="e.g. Mahindra 575 DI">
+      </div>
+
+      <div class="equipment-form-field">
+        <label for="equipmentCategory">Category *</label>
+        <select id="equipmentCategory" required>
+          <option value="">Select category</option>
+          <option>Tractor</option>
+          <option>Harvester</option>
+          <option>Rotavator</option>
+          <option>Sprayer</option>
+          <option>Seed Drill</option>
+          <option>Water Pump</option>
+          <option>Other</option>
+        </select>
+      </div>
+
+      <div class="equipment-form-field">
+        <label for="equipmentPrice">Price per day (₹) *</label>
+        <input id="equipmentPrice" type="number" min="1" step="0.01"
+               required placeholder="e.g. 1500">
+      </div>
+
+      <div class="equipment-form-field">
+        <label for="equipmentLocation">Location *</label>
+        <input id="equipmentLocation" type="text" required
+               placeholder="Village, town or city">
+      </div>
+
+      <div class="equipment-form-field">
+        <label for="equipmentImage">Image URL (optional)</label>
+        <input id="equipmentImage" type="url"
+               placeholder="https://example.com/tractor.jpg">
+      </div>
+
+      <div class="equipment-form-field">
+        <label for="equipmentSpecs">Specifications (optional)</label>
+        <textarea id="equipmentSpecs" rows="3"
+          placeholder="Fuel: Diesel&#10;Power: 45 HP"></textarea>
+      </div>
+
+      <div class="equipment-form-field equipment-form-full">
+        <label for="equipmentDescription">Description</label>
+        <textarea id="equipmentDescription" rows="3"
+          placeholder="Describe the equipment and its uses"></textarea>
+      </div>
+    </div>
+
+    <label class="equipment-available-option">
+      <input type="checkbox" id="equipmentAvailable" checked>
+      Available for booking
+    </label>
+
+    <div class="equipment-form-actions">
+      <button class="btn btn-primary" type="submit">Save Equipment</button>
+      <button class="btn btn-outline" type="button"
+              onclick="hideAddEquipmentForm()">Cancel</button>
+    </div>
+    <p id="addEquipmentMessage" role="status"></p>
+  </form>
+</div>
+
+      <p id="ownerEquipmentMessage" class="inline-message" role="status"></p>
+
+      <div class="table-wrapper">
+        <table class="rentals-table">
+          <thead>
+            <tr>
+              <th>Equipment</th>
+              <th>Category</th>
+              <th>Price / Day</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="ownerEquipmentRows">
+            <tr><td colspan="5">Loading your equipment...</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div><!-- /.dashboard-main -->
+  </div><!-- /.dashboard-layout -->
+</section><!-- /#page-ownerDashboard -->
+
+<!-- =========================================================
+     PAGE 7: BOOKING REQUESTS  (a sibling of the owner dashboard, NOT nested inside it)
+========================================================= -->
+<section class="page" id="page-bookingRequests">
+  <div class="dashboard-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="dashboard-sidebar">
+      <div class="logo dashboard-logo"><span class="logo-emoji">🌾</span> FarmRent</div>
+      <nav class="dashboard-nav">
+        <a href="#" onclick="showOwnerDashboard(); return false;"><i class="fa-solid fa-gauge"></i> Dashboard</a>
+        <a href="#" onclick="showOwnerDashboard('ownerEquipmentSection'); return false;"><i class="fa-solid fa-tractor"></i> My Equipment</a>
+        <a href="#" class="active" onclick="showPage('bookingRequests'); return false;"><i class="fa-solid fa-calendar-check"></i> Booking Requests</a>
+        <a href="#" onclick="showOwnerDashboard('ownerEarningsCard'); return false;"><i class="fa-solid fa-indian-rupee-sign"></i> Earnings</a>
+        <a href="#" onclick="showProfilePage(); return false;"><i class="fa-solid fa-user"></i> Profile</a>
+        <a href="#" onclick="handleLogout(); return false;"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+      </nav>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <div class="dashboard-main">
+      <h1>Booking Requests</h1>
+      <p class="page-intro">Review and manage requests from farmers.</p>
+
+      <p id="bookingRequestsMessage" class="inline-message" role="status"></p>
+
+      <div id="bookingRequestsList" class="booking-requests-list">
+        <p class="muted-text">Loading booking requests...</p>
+      </div>
+    </div>
+
+  </div>
+</section><!-- /#page-bookingRequests -->
+
+<!-- PAGE 8: ADMIN DASHBOARD (screen choice is UX only; access is enforced by RLS / admin_overview() in the database) -->
+<section class="page" id="page-admin">
+  <div class="dashboard-layout">
+    <aside class="dashboard-sidebar">
+      <div class="logo dashboard-logo"><span class="logo-emoji">🌾</span> FarmRent</div>
+      <nav class="dashboard-nav" id="adminNav">
+        <a href="#" class="active" data-section="overview" onclick="showAdminSection('overview'); return false;"><i class="fa-solid fa-gauge"></i> Overview</a>
+        <a href="#" data-section="users" onclick="showAdminSection('users'); return false;"><i class="fa-solid fa-users"></i> Users</a>
+        <a href="#" data-section="equipment" onclick="showAdminSection('equipment'); return false;"><i class="fa-solid fa-tractor"></i> Equipment</a>
+        <a href="#" data-section="settings" onclick="showAdminSection('settings'); return false;"><i class="fa-solid fa-sliders"></i> Commission</a>
+        
+        <a href="#" onclick="showOwnerDashboard(); refreshOwnerDashboard(); return false;">
+    <i class="fa-solid fa-user-check"></i> My Owner Workspace
+</a>
+
+        <a href="#" onclick="handleLogout(); return false;"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+      </nav>
+    </aside>
+    <div class="dashboard-main">
+      <h1 id="adminWelcome">Admin Dashboard</h1>
+      <p id="adminMessage" class="inline-message" role="status"></p>
+
+      <div class="admin-section" id="adminSection-overview">
+        <h2 class="dashboard-subheading">Recorded data</h2>
+        <div class="summary-cards">
+          <div class="summary-card"><span class="summary-number" id="admFarmers">…</span><span class="summary-label">Registered Farmers</span></div>
+          <div class="summary-card"><span class="summary-number" id="admOwners">…</span><span class="summary-label">Registered Owners</span></div>
+          <div class="summary-card"><span class="summary-number" id="admEquipment">…</span><span class="summary-label">Equipment Listings</span></div>
+          <div class="summary-card"><span class="summary-number" id="admBookings">…</span><span class="summary-label">Booking Requests</span></div>
+        </div>
+        <h2 class="dashboard-subheading">Transaction value</h2>
+        <div class="summary-cards">
+          <div class="summary-card"><span class="summary-number" id="admValue">…</span><span class="summary-label">Completed bookings value <span class="data-tag actual">Recorded</span></span><span class="summary-note">Sum of completed rentals. Status independent of payment receipt.</span></div>
+          <div class="summary-card"><span class="summary-number" id="admCommission">…</span><span class="summary-label">Platform commission <span class="data-tag estimate">Estimate</span></span><span class="summary-note" id="admCommissionNote"></span></div>
+          <div class="summary-card"><span class="summary-number" id="admOwnerShare">…</span><span class="summary-label">Owner earnings <span class="data-tag estimate">Estimate</span></span><span class="summary-note">Completed value minus estimated commission.</span></div>
+          <div class="summary-card"><span class="summary-number" id="admPaidValue">…</span><span class="summary-label">Demo Paid Volume <span class="data-tag actual">Simulated</span></span><span class="summary-note">Total value settled via demo payment flow.</span></div>
+        </div>
+        <h2 class="dashboard-subheading">Booking status breakdown</h2>
+        <div class="table-wrapper admin-panel" id="admStatusBars"><p class="muted-text">Loading...</p></div>
+        <h2 class="dashboard-subheading">Monthly booking trend</h2>
+        <div class="table-wrapper admin-panel" id="admMonthlyBars"><p class="muted-text">Loading...</p></div>
+        <h2 class="dashboard-subheading">Bookings by equipment category</h2>
+        <p class="muted-text">Approximate: bookings are matched to equipment by name.</p>
+        <div class="table-wrapper admin-panel" id="admCategoryBars"><p class="muted-text">Loading...</p></div>
+      </div>
+
+      <div class="admin-section" id="adminSection-users" hidden>
+        <h2 class="dashboard-subheading">Users (read-only)</h2>
+        <div class="table-wrapper"><table class="rentals-table">
+          <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Role</th></tr></thead>
+          <tbody id="admUserRows"><tr><td colspan="4">Loading...</td></tr></tbody>
+        </table></div>
+      </div>
+
+      <div class="admin-section" id="adminSection-equipment" hidden>
+        <h2 class="dashboard-subheading">Equipment listings (read-only)</h2>
+        <div class="table-wrapper"><table class="rentals-table">
+          <thead><tr><th>Equipment</th><th>Category</th><th>Owner</th><th>Price / Day</th><th>Status</th></tr></thead>
+          <tbody id="admEquipmentRows"><tr><td colspan="5">Loading...</td></tr></tbody>
+        </table></div>
+      </div>
+
+      <div class="admin-section" id="adminSection-settings" hidden>
+        <h2 class="dashboard-subheading">Commission setting</h2>
+        <div class="equipment-form-card">
+          <p>Used only for the <strong>estimates</strong> on the Overview. It does not charge anyone.</p>
+          <div class="commission-form">
+            <label for="commissionInput">Commission (%) — 0 to 30</label>
+            <input id="commissionInput" type="number" min="0" max="30" step="0.5" />
+            <button class="btn btn-primary" id="commissionSaveBtn" onclick="saveCommission()">Save</button>
+          </div>
+          <p id="commissionMessage" class="inline-message" role="status"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section><!-- /#page-admin -->
+
+</main>
+
+<!-- ================= FOOTER (shown on Home & Listing pages) ================= -->
+<footer class="site-footer" id="siteFooter">
+  <div class="footer-inner">
+    <div class="footer-col">
+      <div class="logo"><span class="logo-emoji">🌾</span> FarmRent</div>
+      <p>Connecting farmers with agricultural equipment owners across India.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Platform</h4>
+      <a href="#" onclick="showPage('home'); return false;">Home</a>
+      <a href="#" onclick="showPage('listing'); return false;">Equipment</a>
+      <a href="#" onclick="scrollToHowItWorks(); return false;">How It Works</a>
+    </div>
+    <div class="footer-col">
+      <h4>Support</h4>
+      <a href="#" onclick="return false;">Help Centre</a>
+      <a href="#" onclick="return false;">Contact Us</a>
+      <a href="#" onclick="return false;">Safety Guidelines</a>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <p><i class="fa-solid fa-phone"></i> 1800-123-4567</p>
+      <p><i class="fa-solid fa-envelope"></i> support@farmrent.in</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2026 FarmRent. Built as a college project prototype.</p>
+  </div>
+</footer>
+
+<!-- ================= AUTH MODAL ================= -->
+<div class="modal-overlay" id="loginModalOverlay" onclick="closeLoginModal(event)">
+  <div class="modal-box auth-box" onclick="event.stopPropagation()">
+
+    <button class="modal-close" onclick="closeLoginModal()">&times;</button>
+
+    <div id="loginForm">
+
+      <h2>Login to FarmRent</h2>
+      <p class="modal-subtext">Access your FarmRent account.</p>
+
+      <div class="modal-field">
+        <label>Email Address</label>
+        <input
+          type="email"
+          id="loginEmail"
+          placeholder="you@example.com"
+          required
+        />
+      </div>
+
+      <div class="modal-field">
+        <label>Password</label>
+        <input
+          type="password"
+          id="loginPassword"
+          placeholder="Enter your password"
+          required
+        />
+      </div>
+
+      <button class="btn btn-primary full-width" onclick="handleLogin()">
+    Login
+</button>
+
+<button class="btn btn-outline full-width" onclick="handleSendOTP()">
+    Login with Email OTP
+</button>
+
+<p class="auth-switch">
+    Don't have an account?
+    <button onclick="showSignupForm()">Create Account</button>
+</p>
+
+<p id="loginMessage" class="auth-message"></p>
+    </div>
+
+    <div id="otpForm" style="display:none;">
+
+    <h2>Enter OTP</h2>
+
+    <p class="modal-subtext">
+        We've sent a 6-digit OTP to your email address.
+    </p>
+
+    <div class="modal-field">
+        <label>One-Time Password</label>
+        <input
+            type="text"
+            id="otpCode"
+            placeholder="Enter 6-digit OTP"
+            maxlength="6"
+            inputmode="numeric"
+        />
+    </div>
+
+    <button class="btn btn-primary full-width" onclick="handleVerifyOTP()">
+        Verify OTP
+    </button>
+
+    <button class="btn btn-outline full-width" onclick="showLoginForm()">
+        Back to Login
+    </button>
+
+    <p id="otpMessage" class="auth-message"></p>
+
+    </div>
+
+    <div id="signupForm" style="display:none;">
+      <h2>Create your account</h2>
+      <p class="modal-subtext">Join FarmRent today.</p>
+
+      <div class="modal-field">
+        <label>Full Name</label>
+        <input
+          type="text"
+          id="signupName"
+          placeholder="Your full name"
+        />
+      </div>
+
+      <div class="modal-field">
+        <label>Email Address</label>
+        <input
+          type="email"
+          id="signupEmail"
+          placeholder="you@example.com"
+        />
+      </div>
+      
+      <div class="modal-field">
+        <label for="signupPhone">Phone Number</label>
+        <input
+          type="tel"
+          id="signupPhone"
+          placeholder="+91 98765 43210"
+          required
+          />
+      </div>
+
+       <div class="modal-field">
+    <label for="signupAddress">Address</label>
+    <textarea
+        id="signupAddress"
+        placeholder="Enter your farm/location address"
+        rows="3"
+        required
+    ></textarea>
+      </div>
+
+      <div class="modal-field">
+        <label>Password</label>
+        <input
+          type="password"
+          id="signupPassword"
+          placeholder="At least 6 characters"
+        />
+      </div>
+
+      <div class="modal-field">
+        <label>I want to</label>
+
+        <select id="signupRole">
+          <option value="farmer">Rent Equipment</option>
+          <option value="owner">List My Equipment</option>
+        </select>
+      </div>
+
+      <button class="btn btn-primary full-width" onclick="handleSignup()">
+        Create Account
+      </button>
+
+      <p class="auth-switch">
+        Already have an account?
+        <button onclick="showLoginForm()">Login</button>
+      </p>
+
+      <p id="signupMessage" class="auth-message"></p>
+    </div>
+
+    <div id="verificationMessage" style="display:none;">
+      <div class="verification-icon">
+        <i class="fa-solid fa-envelope"></i>
+      </div>
+
+      <h2>Verify your email</h2>
+
+      <p class="modal-subtext">
+        We've sent a verification link to your email address.
+        Please check your inbox and click the link to activate your account.
+      </p>
+
+      <button class="btn btn-outline full-width" onclick="showLoginForm()">
+        Back to Login
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ================= DEMO PAYMENT CHECKOUT MODAL ================= -->
+<div class="modal-overlay" id="demoPaymentModalOverlay" onclick="closeDemoPaymentModal(event)">
+  <div class="modal-box payment-checkout-box" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="closeDemoPaymentModal()" aria-label="Close modal">&times;</button>
+    
+    <div class="payment-modal-header">
+      <div class="payment-header-icon"><i class="fa-solid fa-shield-halved"></i></div>
+      <div>
+        <div class="demo-pill-badge"><i class="fa-solid fa-flask"></i> DEMO PAYMENT — NO REAL MONEY</div>
+        <h2>Demo Payment Checkout</h2>
+      </div>
+    </div>
+
+    <div class="demo-warning-banner">
+      <i class="fa-solid fa-circle-info"></i>
+      <div>
+        <strong>Demonstration Simulation Environment</strong>
+        <p>No real charges will occur. Do not enter actual card numbers or passwords. This simulated checkout fulfills college PBL evaluation requirements.</p>
+      </div>
+    </div>
+
+    <!-- Checkout Summary -->
+    <div class="payment-checkout-summary" id="paymentCheckoutSummary">
+      <!-- Injected dynamically: equipment image, name, dates, duration, breakdown -->
+    </div>
+
+    <!-- Payment Method Selector -->
+    <div class="payment-method-selector">
+      <label class="payment-label">Select Demo Payment Method</label>
+      <div class="payment-options">
+        <label class="payment-option active" id="optPayUPI">
+          <input type="radio" name="demoPayMethod" value="demo_upi" checked onchange="handlePaymentMethodChange(this.value)">
+          <span class="pay-icon"><i class="fa-solid fa-mobile-screen-button"></i></span>
+          <span class="pay-text"><strong>Demo UPI / QR</strong><small>Instant simulated authorization</small></span>
+        </label>
+        <label class="payment-option" id="optPayCard">
+          <input type="radio" name="demoPayMethod" value="demo_card" onchange="handlePaymentMethodChange(this.value)">
+          <span class="pay-icon"><i class="fa-solid fa-credit-card"></i></span>
+          <span class="pay-text"><strong>Demo Card / NetBanking</strong><small>Simulated test gateway</small></span>
+        </label>
+        <label class="payment-option" id="optPayCOD">
+          <input type="radio" name="demoPayMethod" value="demo_cod" onchange="handlePaymentMethodChange(this.value)">
+          <span class="pay-icon"><i class="fa-solid fa-handshake"></i></span>
+          <span class="pay-text"><strong>Demo Pay on Delivery</strong><small>Cash settlement to owner</small></span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Demo Simulation Fields (Visual Only, No Real Secrets Collected) -->
+    <div class="payment-method-preview" id="paymentMethodPreview">
+      <div class="demo-upi-preview" id="previewUPI">
+        <p class="muted-text">Simulated Virtual Payment Address (VPA):</p>
+        <input type="text" readonly value="farmer.demo@okfarmrent" class="demo-input-readonly">
+      </div>
+      <div class="demo-card-preview" id="previewCard" style="display:none;">
+        <p class="muted-text">Simulated Test Card (Sandbox):</p>
+        <input type="text" readonly value="4111 •••• •••• 1111 (Demo Card — No CVV)" class="demo-input-readonly">
+      </div>
+      <div class="demo-cod-preview" id="previewCOD" style="display:none;">
+        <p class="muted-text">Simulated Pay on Delivery agreement. Payment will be handed over to equipment owner upon delivery.</p>
+      </div>
+    </div>
+
+    <!-- Processing State Indicator -->
+    <div id="paymentProcessingState" class="payment-processing-state" style="display:none;">
+      <div class="payment-spinner"></div>
+      <p id="paymentProcessingText">Simulating payment gateway authorization...</p>
+    </div>
+
+    <!-- Failure Alert -->
+    <div id="paymentFailureAlert" class="payment-failure-alert" style="display:none;">
+      <i class="fa-solid fa-circle-exclamation"></i>
+      <div>
+        <strong>Simulated Payment Failed</strong>
+        <p id="paymentFailureReason">The demo payment gateway simulated a bank network decline.</p>
+      </div>
+    </div>
+
+    <!-- Modal Actions -->
+    <div class="payment-modal-actions" id="paymentModalActions">
+      <button class="btn btn-primary btn-success-demo" id="btnSimulateSuccess" onclick="executeDemoPayment(true)">
+        <i class="fa-solid fa-circle-check"></i> Simulate Payment Success
+      </button>
+      <button class="btn btn-outline btn-simulate-fail" id="btnSimulateFail" onclick="executeDemoPayment(false)">
+        <i class="fa-solid fa-circle-xmark"></i> Simulate Payment Failure
+      </button>
+      <button class="btn btn-text" onclick="closeDemoPaymentModal()">
+        Cancel / Pay Later
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ================= DEMO RECEIPT MODAL ================= -->
+<div class="modal-overlay" id="demoReceiptModalOverlay" onclick="closeDemoReceiptModal(event)">
+  <div class="modal-box receipt-modal-box" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="closeDemoReceiptModal()" aria-label="Close modal">&times;</button>
+    
+    <div class="receipt-container" id="receiptPrintArea">
+      <div class="receipt-header">
+        <div class="receipt-brand">
+          <span class="logo-emoji">🌾</span> <strong>FarmRent</strong>
+        </div>
+        <div class="receipt-badge">DEMO RECEIPT</div>
+      </div>
+
+      <div class="receipt-meta-grid">
+        <div>
+          <span class="receipt-label">Receipt Number</span>
+          <strong id="rcptNumber">FR-REC-2026-00000</strong>
+        </div>
+        <div>
+          <span class="receipt-label">Date & Time</span>
+          <span id="rcptDate">—</span>
+        </div>
+        <div>
+          <span class="receipt-label">Booking Reference</span>
+          <strong id="rcptBookingRef">FR-2026-00000</strong>
+        </div>
+        <div>
+          <span class="receipt-label">Transaction ID</span>
+          <span id="rcptTxnId">TXN-DEMO-SIM-00000</span>
+        </div>
+      </div>
+
+      <div class="receipt-divider"></div>
+
+      <div class="receipt-parties">
+        <div>
+          <span class="receipt-label">Billed To (Farmer)</span>
+          <strong id="rcptFarmerName">Farmer Name</strong>
+          <p id="rcptFarmerPhone" class="receipt-subtext">+91 —</p>
+        </div>
+        <div>
+          <span class="receipt-label">Payment Mode</span>
+          <span id="rcptPaymentMode">Demo UPI Simulation</span>
+          <p class="receipt-subtext">Status: <strong>PAID (DEMO)</strong></p>
+        </div>
+      </div>
+
+      <table class="receipt-table">
+        <thead>
+          <tr>
+            <th>Item / Service</th>
+            <th>Duration</th>
+            <th>Rate</th>
+            <th style="text-align:right;">Amount</th>
+          </tr>
+        </thead>
+        <tbody id="rcptItemsTable">
+          <!-- Filled dynamically -->
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="3">Equipment Rental Subtotal</td>
+            <td style="text-align:right;" id="rcptSubtotal">₹0</td>
+          </tr>
+          <tr>
+            <td colspan="3">Platform Service Fee (Flat)</td>
+            <td style="text-align:right;" id="rcptServiceFee">₹500</td>
+          </tr>
+          <tr class="receipt-total-row">
+            <td colspan="3"><strong>Total Amount Paid</strong></td>
+            <td style="text-align:right;"><strong id="rcptTotalPaid">₹0</strong></td>
+          </tr>
+        </tfoot>
+      </table>
+
+      <div class="receipt-stamp-box">
+        <div class="receipt-stamp">PAID — DEMO SIMULATION</div>
+        <p class="receipt-disclaimer">
+          This receipt is an electronic demonstration record generated by the FarmRent academic PBL project. No legal financial transaction or bank movement occurred.
+        </p>
+      </div>
+    </div>
+
+    <div class="receipt-actions">
+      <button class="btn btn-primary" onclick="printReceipt()"><i class="fa-solid fa-print"></i> Print Receipt</button>
+      <button class="btn btn-outline" onclick="closeDemoReceiptModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="script.js"></script>
+<script>
+(() => {
+  const frame = document.getElementById("cinematicHomeFrame");
+  window.addEventListener("message", (event) => {
+    if (!frame || event.source !== frame.contentWindow || event.origin !== window.location.origin) return;
+    const message = event.data || {};
+    if (message.type !== "farmrent:navigate") return;
+    if (message.action === "browse") showPage("listing");
+    else if (message.action === "list") handleListEquipment();
+    else if (message.action === "login") openLoginModal();
+    else if (message.action === "home") showPage("home");
+  });
+})();
+</script>
+</body>
+</html>
